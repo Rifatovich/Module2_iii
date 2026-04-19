@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 from datetime import datetime
 from src.link_analyzer import LinkAnalyzer
 
@@ -11,7 +12,7 @@ class StatsCollector:
         stats = link_analyzer.get_statistics()
         result = {
             "target_site": self.target_url,
-            "crawl_date": datetime.utcnow().isoformat() + "Z",
+            "crawl_date": datetime.now(timezone.utc).isoformat(),
             "statistics": {
                 "total_pages_processed": pages_processed,
                 "total_links_found": stats['total_links_found'],
