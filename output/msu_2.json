@@ -1,0 +1,14 @@
+{
+  "target_site": "https://msu.ru",
+  "crawl_date": "2026-04-19T20:15:33.369828Z",
+  "statistics": {
+    "total_pages_processed": 1873,
+    "total_links_found": 73384,
+    "internal_pages": 4763,
+    "broken_links": 239,
+    "internal_subdomains": 275,
+    "external_links_total": 36742,
+    "unique_external_resources": 229,
+    "unique_file_links_doc_docx_pdf": 593
+  }
+}

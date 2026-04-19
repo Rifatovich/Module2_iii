@@ -1,0 +1,14 @@
+{
+  "target_site": "https://spbu.ru",
+  "crawl_date": "2026-04-19T22:59:10.108488Z",
+  "statistics": {
+    "total_pages_processed": 1873,
+    "total_links_found": 430761,
+    "internal_pages": 21437,
+    "broken_links": 219,
+    "internal_subdomains": 189,
+    "external_links_total": 27402,
+    "unique_external_resources": 1963,
+    "unique_file_links_doc_docx_pdf": 649
+  }
+}

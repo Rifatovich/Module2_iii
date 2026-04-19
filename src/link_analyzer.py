@@ -26,8 +26,7 @@ class LinkAnalyzer:
                 self.internal_urls.add(link)
                 
                 if is_subdomain(link, self.base_domain):
-                    sub = get_domain(link)
-                    self.internal_subdomains.add(sub)
+                    self.internal_subdomains.add(get_domain(link))
                 
                 ext = extract_file_extension(link)
                 if ext in ('doc', 'docx', 'pdf'):
@@ -46,19 +45,39 @@ class LinkAnalyzer:
                 if ext in ('doc', 'docx', 'pdf'):
                     self.unique_file_links.add(link)
 
-    def _check_link_status(self, url: str, timeout: int = 5) -> bool:
-        try:
-            resp = requests.head(url, timeout=timeout, allow_redirects=True)
-            if resp.status_code >= 400:
-                return True
-            if resp.status_code == 405:
-                resp = requests.get(url, timeout=timeout, stream=True)
+    def _check_link_status(self, url: str, timeout: int = 10):
+        urls_to_try = [url]
+        
+        if url.startswith('http://'):
+            urls_to_try.append(url.replace('http://', 'https://'))
+        elif url.startswith('https://'):
+            urls_to_try.append(url.replace('https://', 'http://'))
+        
+        for test_url in urls_to_try:
+            try:
+                resp = requests.head(test_url, timeout=timeout, allow_redirects=True)
+                
+                if resp.status_code == 403:
+                    return False
+                
+                if resp.status_code == 405:
+                    resp = requests.get(test_url, timeout=timeout, stream=True)
+                    if resp.status_code >= 400 and resp.status_code != 403:
+                        return True
+                    resp.close()
+                    return False
+                
                 if resp.status_code >= 400:
+                    if resp.status_code == 403:
+                        return False
                     return True
-                resp.close()
-            return False
-        except requests.RequestException:
-            return True
+                
+                return False
+                
+            except (requests.Timeout, requests.ConnectionError, requests.RequestException):
+                continue
+        
+        return True
 
     def get_statistics(self):
         return {
